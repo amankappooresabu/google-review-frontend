@@ -4,6 +4,11 @@ import { useState } from "react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+const headers = {
+  "Content-Type": "application/json",
+  "ngrok-skip-browser-warning": "true"
+};
+
 export default function ScrapeForm() {
   const [url, setUrl] = useState("");
   const [status, setStatus] = useState("idle");
@@ -16,7 +21,7 @@ export default function ScrapeForm() {
   const pollJob = (id) => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`${API_BASE}/jobs/${id}`);
+        const res = await fetch(`${API_BASE}/jobs/${id}`, { headers });
         const data = await res.json();
 
         if (data.progress?.total_seen) {
@@ -25,7 +30,7 @@ export default function ScrapeForm() {
 
         if (data.status === "completed") {
           clearInterval(interval);
-          const placesRes = await fetch(`${API_BASE}/places`);
+          const placesRes = await fetch(`${API_BASE}/places`, { headers });
           const places = await placesRes.json();
           const match = places.find((p) => p.original_url === url);
           if (match) {
@@ -64,7 +69,7 @@ export default function ScrapeForm() {
 
       const res = await fetch(`${API_BASE}/scrape`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           url,
           sort_by: "newest",
@@ -89,7 +94,7 @@ export default function ScrapeForm() {
   };
 
   const handleDownload = async () => {
-    const res = await fetch(`${API_BASE}/download-csv`);
+    const res = await fetch(`${API_BASE}/download-csv`, { headers });
     const blob = await res.blob();
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
