@@ -83,7 +83,7 @@ export function useScraperQueue() {
     ));
 
     try {
-      const after = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
+      const after = new Date(Date.now() - 183 * 24 * 60 * 60 * 1000)
         .toISOString().split("T")[0];
 
       const res = await fetch(`${API_BASE}/scrape`, {

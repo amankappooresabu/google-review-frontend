@@ -121,7 +121,7 @@ export default function ScrapeForm() {
           )}
 
           <p className="text-center text-xs text-gray-400">
-            Fetches reviews from the last 12 months · Up to 5 locations
+            Fetches reviews from the last 6 months · Up to 5 locations
           </p>
 
         </div>
